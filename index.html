@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deside — Pèp la deside</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2A4A; --blue:#2F5FD0; --blue2:#4E7BE8; --gold:#E8B54D;
+  --bg:#0A1020; --bg2:#0F1830; --card:#141F3A; --card2:#1B294A;
+  --line:#26365C; --ink:#EEF3FB; --muted:#94A3C2; --radius:16px;
+  --disp:"Space Grotesk",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,sans-serif;
+  --glow:color-mix(in srgb,var(--blue) 55%,transparent);
+  --goldglow:color-mix(in srgb,var(--gold) 45%,transparent);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+h1,h2,h3,.disp{font-family:var(--disp)}
+::selection{background:var(--blue);color:#fff}
+
+.demobar{background:linear-gradient(90deg,#111a30,#0d1428);color:#9FB6E6;font-size:11.5px;padding:7px 18px;display:flex;gap:8px;align-items:center;border-bottom:1px solid #1c2842}
+.demobar b{color:#fff}
+.demobar .pill{margin-left:auto;background:#15203a;padding:3px 11px;border-radius:20px;color:var(--gold);font-weight:600;white-space:nowrap}
+
+.hdr{position:relative;padding:15px 22px;display:flex;align-items:center;gap:13px;background:linear-gradient(180deg,var(--bg2),var(--bg));border-bottom:1px solid var(--line)}
+.hdr .logo{width:46px;height:46px;border-radius:13px;flex:none;display:grid;place-items:center;background:linear-gradient(135deg,var(--navy),#0e1830);box-shadow:0 8px 22px var(--glow);border:1px solid rgba(255,255,255,.10);position:relative;overflow:hidden}
+.hdr .logo svg{width:30px;height:30px}
+.hdr .brand .name{font-family:var(--disp);font-size:19px;font-weight:700;letter-spacing:-.5px}
+.hdr .brand .name b{color:var(--gold)}
+.hdr .brand .slogan{font-size:11px;color:var(--muted);letter-spacing:.3px}
+.hdr .hr{margin-left:auto;display:flex;gap:9px;align-items:center}
+.hdr .live{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ff2d55,#e11d48);color:#fff;font-size:11px;font-weight:700;padding:7px 12px;border-radius:30px;box-shadow:0 6px 18px rgba(225,29,72,.35)}
+.hdr .live .dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:blink 1.1s infinite}
+.hdr .join{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--gold),#c8922f);color:#20180a;font-size:12px;font-weight:700;padding:8px 14px;border-radius:30px;cursor:pointer;border:none;box-shadow:0 6px 16px var(--goldglow)}
+@keyframes blink{50%{opacity:.2}}
+
+.mainnav{display:flex;gap:8px;padding:11px 22px;overflow-x:auto;scrollbar-width:none;background:var(--bg2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+.mainnav::-webkit-scrollbar{display:none}
+.mainnav a{font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;padding:8px 15px;border-radius:30px;background:var(--card);border:1px solid var(--line);transition:.18s;cursor:pointer}
+.mainnav a:hover{color:var(--ink);border-color:var(--blue)}
+.mainnav a.active{color:#fff;background:linear-gradient(135deg,var(--blue),var(--navy));border-color:transparent;box-shadow:0 6px 16px var(--glow)}
+
+.route-page{display:none}
+.route-page.show{display:block;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+.eyebrow{font-family:var(--disp);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--gold);border-radius:2px}
+.sec-title{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px}
+.sec-sub{color:var(--muted);font-size:14px;margin-bottom:22px;max-width:640px}
+.block{padding:40px 0}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.card .thumb{aspect-ratio:16/9;background:linear-gradient(135deg,var(--navy),#0d1526);display:grid;place-items:center;font-size:34px;position:relative;border-bottom:1px solid var(--line)}
+.card .thumb .tag{position:absolute;top:10px;left:10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:rgba(10,16,32,.8);border:1px solid var(--line);color:var(--gold);padding:4px 9px;border-radius:20px}
+.card .thumb .liveflag{position:absolute;top:10px;right:10px;font-size:10px;font-weight:800;background:#e11d48;color:#fff;padding:4px 9px;border-radius:20px;display:flex;gap:5px;align-items:center}
+.card .thumb .liveflag i{width:6px;height:6px;border-radius:50%;background:#fff;animation:blink 1.1s infinite}
+.card .body{padding:14px 15px}
+.card .body h3{font-size:15.5px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.card .body p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.card .body .meta{margin-top:10px;font-size:11.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.chip{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:20px;background:rgba(47,95,208,.14);color:var(--blue2);border:1px solid rgba(47,95,208,.25)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:11px 18px;border-radius:12px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);transition:.16s}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:linear-gradient(135deg,var(--blue),var(--navy));border-color:transparent;box-shadow:0 8px 20px var(--glow)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#c8922f);color:#20180a;border-color:transparent;box-shadow:0 8px 20px var(--goldglow)}
+.notice{font-size:11.5px;color:var(--muted);background:rgba(232,181,77,.07);border:1px solid rgba(232,181,77,.22);border-radius:12px;padding:10px 13px;display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+.notice b{color:var(--gold)}
+
+.hero{position:relative;overflow:hidden;padding:44px 0 10px}
+.hero-bg{position:absolute;inset:0;z-index:0;background:
+  radial-gradient(900px 360px at 82% -8%,var(--glow),transparent 60%),
+  radial-gradient(760px 320px at 0% 4%,color-mix(in srgb,var(--gold) 16%,transparent),transparent 58%),
+  linear-gradient(180deg,var(--bg2),var(--bg))}
+.pitch{position:absolute;inset:0;z-index:0;opacity:.5;pointer-events:none}
+.pitch .cl{position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(78,123,232,.25),transparent)}
+.pitch .cc{position:absolute;left:50%;top:34%;width:150px;height:150px;border:1px solid rgba(78,123,232,.18);border-radius:50%;transform:translate(-50%,-50%)}
+.hero .wrap{position:relative;z-index:1}
+.hero h1{font-size:34px;font-weight:700;letter-spacing:-1px;line-height:1.08;margin-bottom:12px}
+.hero h1 b{color:var(--gold)}
+.hero .lead{color:var(--muted);font-size:14.5px;max-width:560px;margin-bottom:22px}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.badges span{font-size:11px;font-weight:600;padding:6px 12px;border-radius:20px;background:var(--card);border:1px solid var(--line);color:var(--muted)}
+.badges span b{color:var(--ink)}
+
+.poll{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.4);max-width:560px}
+.poll .q-eye{font-family:var(--disp);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.poll .q-eye .rub{background:rgba(47,95,208,.16);color:var(--blue2);padding:2px 9px;border-radius:20px;letter-spacing:.5px}
+.poll h2{font-size:20px;font-weight:700;line-height:1.25;margin-bottom:4px}
+.poll .kreyol{font-size:12.5px;color:var(--gold);font-weight:600;margin-bottom:16px}
+.opt{position:relative;border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:10px;cursor:pointer;overflow:hidden;transition:.16s;background:var(--bg2)}
+.opt:hover{border-color:var(--blue)}
+.opt .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,rgba(47,95,208,.32),rgba(47,95,208,.12));transition:width .7s cubic-bezier(.2,.8,.2,1);z-index:0}
+.opt.win .fill{background:linear-gradient(90deg,rgba(232,181,77,.34),rgba(232,181,77,.12))}
+.opt .row{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.opt .label{font-size:14px;font-weight:600}
+.opt .pct{font-family:var(--disp);font-size:14px;font-weight:700;opacity:0;transition:.3s}
+.poll.voted .opt .pct{opacity:1}
+.poll.voted .opt{cursor:default}
+.poll .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;font-size:11.5px;color:var(--muted)}
+.poll .foot .count b{color:var(--ink)}
+.poll .share{display:flex;gap:7px}
+.poll .share button{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--bg2);color:var(--muted);cursor:pointer;font-size:12px;font-weight:800}
+.poll .share button:hover{color:#fff;border-color:var(--blue)}
+.voted-msg{margin-top:12px;font-size:12px;color:var(--gold);font-weight:600;display:none;align-items:center;gap:7px}
+.poll.voted .voted-msg{display:flex}
+
+.strip{padding:34px 0;border-top:1px solid var(--line)}
+.strip .head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+.strip .head h2{font-size:19px;font-weight:700}
+.strip .head a{font-size:12.5px;color:var(--blue2);font-weight:600;cursor:pointer}
+
+.slider{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--card)}
+.slides{display:flex;transition:transform .5s ease}
+.slide{min-width:100%;aspect-ratio:21/9;display:grid;place-items:center;text-align:center;padding:24px;position:relative}
+.slide .s-eye{font-family:var(--disp);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:8px}
+.slide h3{font-size:22px;font-weight:700;margin-bottom:8px;max-width:520px}
+.slide p{font-size:13px;color:var(--muted);max-width:460px}
+.slide.s1{background:radial-gradient(600px 240px at 20% 20%,rgba(47,95,208,.25),transparent),linear-gradient(135deg,var(--navy),#0d1526)}
+.slide.s2{background:radial-gradient(600px 240px at 80% 30%,rgba(232,181,77,.2),transparent),linear-gradient(135deg,#14223f,#0d1526)}
+.slide.s3{background:radial-gradient(600px 240px at 50% 80%,rgba(78,123,232,.22),transparent),linear-gradient(135deg,#101b34,#0d1526)}
+.sdots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:2}
+.sdots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28);cursor:pointer;transition:.2s}
+.sdots i.on{background:var(--gold);width:20px;border-radius:5px}
+.sarrow{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(10,16,32,.6);color:#fff;cursor:pointer;display:grid;place-items:center;font-size:16px}
+.sarrow.l{left:12px}.sarrow.r{right:12px}
+
+.rubs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.rubs .r{font-size:11.5px;font-weight:600;padding:6px 13px;border-radius:20px;background:var(--card);border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:.15s}
+.rubs .r:hover,.rubs .r.on{color:#fff;border-color:var(--blue);background:linear-gradient(135deg,rgba(47,95,208,.3),rgba(27,42,74,.3))}
+
+.forum-state{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:20px}
+.forum-state .led{width:11px;height:11px;border-radius:50%;flex:none}
+.forum-state.open .led{background:#22c55e;box-shadow:0 0 12px #22c55e;animation:blink 1.4s infinite}
+.forum-state.closed .led{background:#64748b}
+.forum-state .txt{flex:1;font-size:13px}
+.forum-state .txt b{display:block;font-size:14px;margin-bottom:2px}
+.forum-state .toggle{font-size:11px;font-weight:700;padding:7px 12px;border-radius:20px;border:1px solid var(--line);background:var(--bg2);color:var(--muted);cursor:pointer}
+.msg{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}
+.msg .av{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;font-size:13px;background:linear-gradient(135deg,var(--blue),var(--navy));color:#fff}
+.msg .m-body .who{font-size:12.5px;font-weight:600}
+.msg .m-body .who span{color:var(--muted);font-weight:400;font-size:11px;margin-left:6px}
+.msg .m-body .txt{font-size:13px;color:#cdd7ec;margin-top:2px}
+.composer{display:flex;gap:9px;margin-top:16px}
+.composer input{flex:1;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--ink);font-family:var(--body);font-size:13px}
+.composer input:focus{outline:none;border-color:var(--blue)}
+.composer.locked{opacity:.6;pointer-events:none}
+
+.tip{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:18px;padding:22px}
+.tip textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px 15px;color:var(--ink);font-family:var(--body);font-size:13px;min-height:100px;resize:vertical}
+.tip textarea:focus{outline:none;border-color:var(--blue)}
+.rule-list{list-style:none;display:grid;gap:9px;margin:14px 0}
+.rule-list li{font-size:13px;color:#cdd7ec;display:flex;gap:9px;align-items:flex-start}
+.rule-list li::before{content:"✓";color:var(--gold);font-weight:800;flex:none}
+.rule-list li.no::before{content:"✕";color:#f87171}
+
+.pill-list{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.pill-list span{font-size:12px;padding:6px 12px;border-radius:20px;background:var(--card);border:1px solid var(--line);color:var(--muted)}
+.two-ent{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+@media(max-width:640px){.two-ent{grid-template-columns:1fr}}
+.ent{border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--card)}
+.ent.media{border-top:3px solid var(--blue)}
+.ent.agence{border-top:3px solid var(--gold)}
+.ent h4{font-family:var(--disp);font-size:15px;margin-bottom:8px}
+.ent p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.ent .no{color:#f87171;font-weight:600;font-size:12px;margin-top:8px}
+.ent .yes{color:var(--gold);font-weight:600;font-size:12px;margin-top:8px}
+.member{text-align:center;padding:18px 12px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.member .av{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:22px;background:linear-gradient(135deg,var(--navy),#0d1526);color:var(--gold);border:1px solid var(--line)}
+.member h4{font-size:14px;font-weight:600}
+.member p{font-size:11.5px;color:var(--muted)}
+.sponsor-slot{border:1.5px dashed var(--line);border-radius:16px;padding:22px;text-align:center;background:rgba(232,181,77,.04)}
+.sponsor-slot .lab{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;font-family:var(--disp)}
+.sponsor-slot h4{font-size:16px;margin-bottom:6px}
+.sponsor-slot p{font-size:12.5px;color:var(--muted)}
+
+.modal{position:fixed;inset:0;z-index:100;background:rgba(6,10,20,.72);backdrop-filter:blur(4px);display:none;place-items:center;padding:22px}
+.modal.show{display:grid;animation:fade .2s}
+.modal .box{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:20px;max-width:420px;width:100%;padding:26px;position:relative}
+.modal .x{position:absolute;top:14px;right:16px;font-size:20px;color:var(--muted);cursor:pointer;background:none;border:none}
+.modal h3{font-size:20px;margin-bottom:6px}
+.modal p.sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.reg{display:grid;gap:10px}
+.reg button{width:100%;justify-content:center}
+.reg .g{background:#fff;color:#20242c}
+.reg .fb{background:#1877f2;color:#fff;border-color:transparent}
+.reg input{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--ink);font-family:var(--body);font-size:13px}
+.reg .divi{text-align:center;font-size:11px;color:var(--muted);margin:4px 0}
+
+.ftr{margin-top:20px;border-top:1px solid var(--line);background:var(--bg2);padding:28px 22px}
+.ftr .wrap{display:grid;gap:16px}
+.ftr .social{display:flex;gap:9px;flex-wrap:wrap}
+.ftr .social a{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:9px 13px;border-radius:11px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.ftr .ico{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:10px;font-weight:900;color:#fff}
+.i-yt{background:#ff0000}.i-fb{background:#1877f2}.i-wa{background:#25d366}.i-tt{background:linear-gradient(135deg,#69C9D0,#EE1D52)}.i-ig{background:linear-gradient(135deg,#833AB4,#E1306C,#FCAF45)}.i-x{background:#000}
+.ftr .meta{font-size:12px;color:var(--muted);line-height:1.7}.ftr .meta b{color:var(--ink)}
+.ftr .neutral{font-size:12px;color:#cdd7ec;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:12px 14px}
+.ftr .made{font-size:11.5px;color:var(--muted)}.ftr .made b{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="demobar">
+  <b>Deside</b> · Sondages en direct
+  <span class="pill" id="authpill">Connecte-toi pour voter</span>
+</div>
+
+<header class="hdr">
+  <div class="logo" aria-hidden="true">
+    <svg viewBox="0 0 40 40" fill="none">
+      <path d="M8 27c2-1 3.5-1 5 0M32 27c-2-1-3.5-1-5 0" stroke="#E8B54D" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="14" cy="17" r="3.4" fill="#4E7BE8"/>
+      <circle cx="26" cy="17" r="3.4" fill="#E8B54D"/>
+      <path d="M14 20.5c-2.4 0-4 1.7-4 4v3h8v-3c0-2.3-1.6-4-4-4Z" fill="#4E7BE8"/>
+      <path d="M26 20.5c-2.4 0-4 1.7-4 4v3h8v-3c0-2.3-1.6-4-4-4Z" fill="#E8B54D"/>
+      <path d="M17 14l2 2 4-4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="brand">
+    <div class="name">DE<b>SIDE</b></div>
+    <div class="slogan">Pèp la deside · Média neutre 100% Ayiti</div>
+  </div>
+  <div class="hr">
+    <span class="live"><span class="dot"></span> LIVE</span>
+    <button class="join" onclick="openReg()">S'inscrire</button>
+  </div>
+</header>
+
+<nav class="mainnav" id="mainnav">
+  <a data-nav="accueil" onclick="navTo('accueil')">Accueil</a>
+  <a data-nav="sondages" onclick="navTo('sondages')">Sondages</a>
+  <a data-nav="lives" onclick="navTo('lives')">Lives</a>
+  <a data-nav="emissions" onclick="navTo('emissions')">Émissions</a>
+  <a data-nav="documentaires" onclick="navTo('documentaires')">Documentaires</a>
+  <a data-nav="analyses" onclick="navTo('analyses')">Analyses &amp; enquêtes</a>
+  <a data-nav="forum" onclick="navTo('forum')">Forum</a>
+  <a data-nav="videos" onclick="navTo('videos')">Vidéos</a>
+  <a data-nav="apropos" onclick="navTo('apropos')">À propos</a>
+</nav>
+
+<section class="route-page" id="page-accueil">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="pitch"><div class="cl"></div><div class="cc"></div></div>
+    <div class="wrap">
+      <div class="eyebrow">Le terrain neutre du peuple haïtien</div>
+      <h1>Ici, c'est le <b>peuple</b> qui décide.</h1>
+      <p class="lead">Deside est le média neutre où les Haïtiens votent, débattent et voient ce que le pays pense — en direct. Nous n'appartenons à aucun camp : nous sommes le terrain, pas un joueur.</p>
+      <div class="badges">
+        <span><b>Neutre</b> · aucun parti</span>
+        <span><b>Tous les sujets</b> · 100% Ayiti</span>
+        <span><b>Sondages</b> vérifiés</span>
+      </div>
+
+      <div class="poll" id="poll-hero">
+        <div class="q-eye">Sondaj jodi a <span class="rub">Sécurité</span></div>
+        <h2>Est-ce que la sécurité s'améliore dans votre zone&nbsp;?</h2>
+        <div class="kreyol">Kisa w panse&nbsp;?</div>
+        <div class="opt" data-oid="a" data-v="42" onclick="vote('poll-hero',this)"><div class="fill"></div><div class="row"><span class="label">Wi, sa vin pi bon</span><span class="pct">0%</span></div></div>
+        <div class="opt" data-oid="b" data-v="71" onclick="vote('poll-hero',this)"><div class="fill"></div><div class="row"><span class="label">Non, se menm bagay</span><span class="pct">0%</span></div></div>
+        <div class="opt" data-oid="c" data-v="58" onclick="vote('poll-hero',this)"><div class="fill"></div><div class="row"><span class="label">Li vin pi mal</span><span class="pct">0%</span></div></div>
+        <div class="voted-msg">✓ Ton vote est compté. Mèsi&nbsp;!</div>
+        <div class="foot">
+          <span class="count"><b id="count-hero">2 340</b> votes · pouls de la communauté</span>
+          <div class="share">
+            <button onclick="fakeShare()" title="Partager">↗</button>
+            <button onclick="fakeShare()" title="WhatsApp">✆</button>
+          </div>
+        </div>
+      </div>
+      <div class="notice" style="max-width:560px;margin-top:14px">
+        <span>ℹ️</span><span><b>Comment on compte&nbsp;:</b> un vote par compte, garde-fous par appareil et par fenêtre de temps. Résultats affichés comme « pouls de la communauté Deside », jamais comme un sondage scientifique. (En démo, le vote s'anime sans être encore enregistré.)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip"><div class="wrap">
+    <div class="head"><h2>Derniers sondages</h2><a onclick="navTo('sondages')">Tout voir →</a></div>
+    <div class="grid g3">
+      <div class="card"><div class="thumb"><span class="tag">Économie</span>📊</div><div class="body"><h3>Le coût de la vie est-il votre priorité n°1&nbsp;?</h3><div class="meta"><span class="chip">4 120 votes</span><span>Clôturé</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Jeunesse</span>🎓</div><div class="body"><h3>Faut-il plus d'espaces pour la jeunesse&nbsp;?</h3><div class="meta"><span class="chip">2 890 votes</span><span>En cours</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Diaspora</span>🌍</div><div class="body"><h3>La diaspora doit-elle pouvoir voter&nbsp;?</h3><div class="meta"><span class="chip">5 610 votes</span><span>En cours</span></div></div></div>
+    </div>
+  </div></div>
+
+  <div class="strip"><div class="wrap">
+    <div class="grid g2" style="align-items:stretch">
+      <div>
+        <div class="head"><h2>Dernière vidéo</h2><a onclick="navTo('videos')">Toutes →</a></div>
+        <div class="card"><div class="thumb" style="aspect-ratio:16/10"><span class="tag">Analyse</span><span class="liveflag"><i></i>RÉSULTATS</span>▶</div><div class="body"><h3>Ce que le peuple a répondu cette semaine</h3><p>L'avatar Deside commente les résultats des 5 sondages de la semaine.</p></div></div>
+      </div>
+      <div>
+        <div class="head"><h2>À la une</h2><a onclick="navTo('emissions')">Émissions →</a></div>
+        <div class="slider">
+          <div class="slides" id="slides">
+            <div class="slide s1"><div class="s-eye">Live ce soir · 19h</div><h3>Débat — Sécurité &amp; élections 2026</h3><p>Le forum s'ouvre pendant l'émission. Pose ta question en direct.</p></div>
+            <div class="slide s2"><div class="s-eye">Nouveau documentaire</div><h3>La république des ONG&nbsp;: où va l'argent&nbsp;?</h3><p>Enquête, faits vérifiés, droit de réponse.</p></div>
+            <div class="slide s3"><div class="s-eye">Rejoins le terrain</div><h3>Inscris-toi pour que ton vote compte</h3><p>Par email, téléphone ou Facebook.</p></div>
+          </div>
+          <button class="sarrow l" onclick="slide(-1)">‹</button>
+          <button class="sarrow r" onclick="slide(1)">›</button>
+          <div class="sdots" id="sdots"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="strip"><div class="wrap">
+    <div class="sponsor-slot" style="border-style:solid;border-color:var(--blue);background:radial-gradient(500px 200px at 50% 0%,rgba(47,95,208,.16),transparent)">
+      <div class="lab" style="color:var(--blue2)">Rejoins le peuple</div>
+      <h4>Ton avis change le score. Inscris-toi.</h4>
+      <p style="margin-bottom:16px">Un compte = un vote qui compte, et le droit d'écrire dans le forum pendant les lives.</p>
+      <button class="btn gold" onclick="openReg()">Créer mon compte</button>
+    </div>
+  </div></div>
+</section>
+
+<section class="route-page" id="page-sondages">
+  <div class="block"><div class="wrap">
+    <div class="eyebrow">Le moteur de Deside</div>
+    <div class="sec-title">Sondages</div>
+    <div class="sec-sub">Vote, vois le résultat en direct, partage. Le peuple joue ; le staff Deside vérifie et analyse. Filtre par rubrique.</div>
+    <div class="rubs" id="rubs">
+      <span class="r on">Toutes</span><span class="r">Politique</span><span class="r">Économie</span><span class="r">Société</span><span class="r">Sécurité</span><span class="r">Culture</span><span class="r">Sport</span><span class="r">Diaspora</span><span class="r">Éducation</span><span class="r">Agriculture</span><span class="r">Jeunesse</span><span class="r">Religion</span>
+    </div>
+
+    <div class="grid g2">
+      <div class="poll" id="poll-a">
+        <div class="q-eye">Politique <span class="rub">Institutions</span></div>
+        <h2>Faites-vous confiance au calendrier électoral 2026&nbsp;?</h2>
+        <div class="kreyol">Kisa w panse&nbsp;?</div>
+        <div class="opt" data-oid="a" data-v="33" onclick="vote('poll-a',this)"><div class="fill"></div><div class="row"><span class="label">Wi, m gen konfyans</span><span class="pct">0%</span></div></div>
+        <div class="opt" data-oid="b" data-v="80" onclick="vote('poll-a',this)"><div class="fill"></div><div class="row"><span class="label">Non, m pa kwè</span><span class="pct">0%</span></div></div>
+        <div class="opt" data-oid="c" data-v="24" onclick="vote('poll-a',this)"><div class="fill"></div><div class="row"><span class="label">M pa konnen</span><span class="pct">0%</span></div></div>
+        <div class="voted-msg">✓ Vote compté. Mèsi&nbsp;!</div>
+        <div class="foot"><span class="count"><b id="count-a">3 705</b> votes</span><div class="share"><button onclick="fakeShare()">↗</button></div></div>
+      </div>
+
+      <div class="poll" id="poll-b">
+        <div class="q-eye">Réseaux sociaux <span class="rub">Société</span></div>
+        <h2>Les réseaux font-ils plus de bien ou de mal en Haïti&nbsp;?</h2>
+        <div class="kreyol">Kisa w panse&nbsp;?</div>
+        <div class="opt" data-oid="a" data-v="47" onclick="vote('poll-b',this)"><div class="fill"></div><div class="row"><span class="label">Plis byen</span><span class="pct">0%</span></div></div>
+        <div class="opt" data-oid="b" data-v="52" onclick="vote('poll-b',this)"><div class="fill"></div><div class="row"><span class="label">Plis mal</span><span class="pct">0%</span></div></div>
+        <div class="voted-msg">✓ Vote compté. Mèsi&nbsp;!</div>
+        <div class="foot"><span class="count"><b id="count-b">1 980</b> votes</span><div class="share"><button onclick="fakeShare()">↗</button></div></div>
+      </div>
+
+      <div class="poll" id="poll-c">
+        <div class="q-eye">Agriculture <span class="rub">Économie</span></div>
+        <h2>Produire local peut-il nourrir Haïti&nbsp;?</h2>
+        <div class="kreyol">Kisa w panse&nbsp;?</div>
+        <div class="opt" data-oid="a" data-v="88" onclick="vote('poll-c',this)"><div class="fill"></div><div class="row"><span class="label">Wi, si Leta ede</span><span class="pct">0%</span></div></div>
+        <div class="opt" data-oid="b" data-v="19" onclick="vote('poll-c',this)"><div class="fill"></div><div class="row"><span class="label">Non, twò difisil</span><span class="pct">0%</span></div></div>
+        <div class="voted-msg">✓ Vote compté. Mèsi&nbsp;!</div>
+        <div class="foot"><span class="count"><b id="count-c">2 447</b> votes</span><div class="share"><button onclick="fakeShare()">↗</button></div></div>
+      </div>
+
+      <div class="poll" id="poll-d">
+        <div class="q-eye">Religion <span class="rub">Société</span></div>
+        <h2>La religion doit-elle jouer un rôle en politique&nbsp;?</h2>
+        <div class="kreyol">Kisa w panse&nbsp;?</div>
+        <div class="opt" data-oid="a" data-v="40" onclick="vote('poll-d',this)"><div class="fill"></div><div class="row"><span class="label">Wi</span><span class="pct">0%</span></div></div>
+        <div class="opt" data-oid="b" data-v="61" onclick="vote('poll-d',this)"><div class="fill"></div><div class="row"><span class="label">Non</span><span class="pct">0%</span></div></div>
+        <div class="opt" data-oid="c" data-v="22" onclick="vote('poll-d',this)"><div class="fill"></div><div class="row"><span class="label">Sa depann</span><span class="pct">0%</span></div></div>
+        <div class="voted-msg">✓ Vote compté. Mèsi&nbsp;!</div>
+        <div class="foot"><span class="count"><b id="count-d">1 615</b> votes</span><div class="share"><button onclick="fakeShare()">↗</button></div></div>
+      </div>
+    </div>
+
+    <div class="notice" style="margin-top:22px">
+      <span>🛡️</span><span><b>Intégrité du vote —</b> un vote par compte · limitation par appareil et IP · fenêtre de temps par sondage · vérification téléphone ajoutée hors phase de test. On ne truque jamais un résultat, on ne le vend jamais.</span>
+    </div>
+  </div></div>
+</section>
+
+<section class="route-page" id="page-lives">
+  <div class="block"><div class="wrap">
+    <div class="eyebrow">En direct</div>
+    <div class="sec-title">Lives</div>
+    <div class="sec-sub">Émissions, débats et rencontres diffusés en direct sur Deside et rediffusés sur nos réseaux. Le forum s'ouvre pendant chaque live.</div>
+    <div class="card" style="margin-bottom:20px"><div class="thumb" style="aspect-ratio:16/7"><span class="liveflag"><i></i>EN DIRECT</span>▶</div><div class="body"><h3>Débat — Sécurité &amp; élections 2026</h3><p>Avec nos invités. Pose ta question dans le forum, ouvert le temps de l'émission.</p><div class="meta"><span class="chip">Politique</span><span class="chip">Sécurité</span><button class="btn" style="padding:7px 13px;font-size:12px" onclick="navTo('forum')">Ouvrir le forum →</button></div></div></div>
+    <div class="grid g3">
+      <div class="card"><div class="thumb"><span class="tag">À venir</span>🎙️</div><div class="body"><h3>Rencontre — La jeunesse prend la parole</h3><div class="meta"><span>Vendredi · 19h</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">À venir</span>🌾</div><div class="body"><h3>Débat — Produire local</h3><div class="meta"><span>Samedi · 18h</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Rediffusion</span>📺</div><div class="body"><h3>Diaspora &amp; droit de vote</h3><div class="meta"><span>Disponible</span></div></div></div>
+    </div>
+    <div class="notice" style="margin-top:20px"><span>🎥</span><span><b>Régie multi-caméra —</b> Deside diffuse en simultané sur YouTube, Facebook, Instagram et TikTok via son studio live.</span></div>
+  </div></div>
+</section>
+
+<section class="route-page" id="page-emissions">
+  <div class="block"><div class="wrap">
+    <div class="eyebrow">Talk-shows · débats · rencontres</div>
+    <div class="sec-title">Émissions</div>
+    <div class="sec-sub">Les rendez-vous réguliers de Deside — chaque émission repart d'un sondage et se prolonge dans le forum.</div>
+    <div class="grid g3">
+      <div class="card"><div class="thumb"><span class="tag">Débat</span>⚖️</div><div class="body"><h3>Tribunal du peuple</h3><p>On met un sujet en débat, le public tranche par le vote.</p><div class="meta"><span>Hebdo · Mardi</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Rencontre</span>🤝</div><div class="body"><h3>Fas a fas</h3><p>Un invité, les questions du public, sans complaisance.</p><div class="meta"><span>Hebdo · Jeudi</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Société</span>🏙️</div><div class="body"><h3>Lakou a</h3><p>Culture, jeunesse, vie quotidienne, réseaux sociaux.</p><div class="meta"><span>Hebdo · Samedi</span></div></div></div>
+    </div>
+  </div></div>
+</section>
+
+<section class="route-page" id="page-documentaires">
+  <div class="block"><div class="wrap">
+    <div class="eyebrow">Le format long de Deside</div>
+    <div class="sec-title">Documentaires</div>
+    <div class="sec-sub">Des enquêtes en profondeur sur les sujets qui décident de l'avenir d'Haïti — toujours avec preuves et équité.</div>
+    <div class="grid g2">
+      <div class="card"><div class="thumb" style="aspect-ratio:16/8"><span class="tag">Enquête</span>🎬</div><div class="body"><h3>La république des ONG</h3><p>Des milliards promis. Quels résultats sur le terrain&nbsp;? Où va l'argent&nbsp;? Faits vérifiés, droit de réponse accordé.</p><div class="meta"><span class="chip">Économie</span><span class="chip">Société</span></div></div></div>
+      <div class="card"><div class="thumb" style="aspect-ratio:16/8"><span class="tag">Mémoire</span>🎬</div><div class="body"><h3>Vodou ayisyen&nbsp;: comprendre, pas juger</h3><p>On explore, on donne la parole. Un regard respectueux sur une part de l'identité haïtienne.</p><div class="meta"><span class="chip">Culture</span><span class="chip">Religion</span></div></div></div>
+    </div>
+  </div></div>
+</section>
+
+<section class="route-page" id="page-analyses">
+  <div class="block"><div class="wrap">
+    <div class="eyebrow">Le VAR de Deside</div>
+    <div class="sec-title">Analyses &amp; enquêtes</div>
+    <div class="sec-sub">À partir des sondages et de nos rencontres, le staff produit l'analyse finale. Et quand c'est d'intérêt public, on enquête — sur tous les camps, avec la même rigueur.</div>
+
+    <div class="grid g2" style="margin-bottom:26px">
+      <div class="card"><div class="thumb"><span class="tag">Dossier</span>📈</div><div class="body"><h3>Ce que le peuple a répondu ce mois-ci</h3><p>Lecture croisée de 20 sondages&nbsp;: ce que les chiffres disent vraiment.</p></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Enquête</span>🔎</div><div class="body"><h3>Promesses vs actes&nbsp;: le suivi</h3><p>On compare ce qui a été promis et ce qui a été fait. Documents à l'appui.</p></div></div>
+    </div>
+
+    <div class="tip">
+      <div class="eyebrow" style="margin-bottom:8px">Ligne de signalement sécurisée</div>
+      <h3 class="disp" style="font-size:19px;margin-bottom:6px">Vous savez quelque chose d'intérêt public&nbsp;?</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:6px">Aidez-nous à tenir les puissants pour responsables. Nous vérifions tout avant de publier.</p>
+      <ul class="rule-list">
+        <li>Conduite publique uniquement (argent public, contrats, promesses) — jamais la vie privée</li>
+        <li>Preuves à l'appui&nbsp;: documents, photos, plusieurs sources</li>
+        <li>Nous contactons toujours la personne visée avant de publier (droit de réponse)</li>
+        <li class="no">Aucune récompense en argent — on ne paie jamais pour des accusations</li>
+      </ul>
+      <textarea placeholder="Décrivez les faits. N'envoyez rien qui vous mette en danger."></textarea>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn primary" onclick="sendTip()">Envoyer de façon anonyme</button>
+        <span id="tip-ok" style="display:none;align-self:center;font-size:12.5px;color:var(--gold);font-weight:600">✓ Reçu. Notre équipe vérifiera. Merci de protéger votre sécurité.</span>
+      </div>
+      <div class="notice" style="margin-top:14px"><span>🔒</span><span>Nous protégeons l'anonymat des sources. Nous ne publions que ce que nous pouvons prouver et défendre. (Démo — le formulaire n'envoie rien pour l'instant.)</span></div>
+    </div>
+  </div></div>
+</section>
+
+<section class="route-page" id="page-forum">
+  <div class="block"><div class="wrap">
+    <div class="eyebrow">La parole du public</div>
+    <div class="sec-title">Forum</div>
+    <div class="sec-sub">Comme un groupe qui s'ouvre pendant les émissions&nbsp;: un sujet à la fois, encadré. Il faut un compte pour écrire.</div>
+
+    <div class="forum-state open" id="forumState">
+      <span class="led"></span>
+      <div class="txt"><b id="forumTitle">Forum OUVERT — Débat en direct</b><span id="forumSub" style="color:var(--muted);font-size:12.5px">Sujet imposé&nbsp;: « La sécurité s'améliore-t-elle&nbsp;? » · fermé à la fin de l'émission</span></div>
+      <button class="toggle" onclick="toggleForum()">Vue admin</button>
+    </div>
+
+    <div class="rubs" style="margin-bottom:16px"><span class="r on">Sécurité</span><span class="r">Politique</span><span class="r">Société</span><span class="r">Économie</span></div>
+
+    <div id="forumThread">
+      <div class="msg"><div class="av">MJ</div><div class="m-body"><div class="who">Marc J. <span>· il y a 2 min</span></div><div class="txt">Nan zòn mwen an sekirite a vin pi mal depi 3 mwa. Fòk yo pale de sa aswè a.</div></div></div>
+      <div class="msg"><div class="av">RD</div><div class="m-body"><div class="who">Rose D. <span>· il y a 4 min</span></div><div class="txt">M dakò ak sondaj la. Men gen kèk katye ki vin pi kalm. Sa depann kote w ye.</div></div></div>
+      <div class="msg"><div class="av">WP</div><div class="m-body"><div class="who">Wildo P. <span>· il y a 6 min</span></div><div class="txt">Bon travay Deside. Se premye fwa yon medya mande VRE opinyon pèp la.</div></div></div>
+    </div>
+
+    <div class="composer locked" id="composer">
+      <input placeholder="Connecte-toi pour écrire dans le forum…" disabled>
+      <button class="btn primary" onclick="openReg()">Se connecter</button>
+    </div>
+    <div class="notice" style="margin-top:14px"><span>💬</span><span><b>Règles&nbsp;:</b> compte obligatoire, un seul sujet, respect exigé. La modération (le VAR de Deside) peut retirer un message ou fermer le forum. (Démo — messages d'exemple.)</span></div>
+  </div></div>
+</section>
+
+<section class="route-page" id="page-videos">
+  <div class="block"><div class="wrap">
+    <div class="eyebrow">Reportages · résultats · galerie</div>
+    <div class="sec-title">Vidéos</div>
+    <div class="sec-sub">Les résultats des sondages en vidéo, les reportages, les moments forts des lives.</div>
+    <div class="grid g3">
+      <div class="card"><div class="thumb"><span class="tag">Résultats</span>▶</div><div class="body"><h3>Le peuple a répondu — semaine 34</h3><div class="meta"><span>3:12</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Reportage</span>▶</div><div class="body"><h3>Marché de Croix-des-Bossales à 5h</h3><div class="meta"><span>6:40</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Moment</span>▶</div><div class="body"><h3>Le meilleur du débat de mardi</h3><div class="meta"><span>4:05</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Culture</span>▶</div><div class="body"><h3>Jeunes artistes de Jacmel</h3><div class="meta"><span>5:22</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Diaspora</span>▶</div><div class="body"><h3>Rentrer ou rester&nbsp;? 4 témoignages</h3><div class="meta"><span>8:10</span></div></div></div>
+      <div class="card"><div class="thumb"><span class="tag">Sport</span>▶</div><div class="body"><h3>Le football de quartier qui unit</h3><div class="meta"><span>3:48</span></div></div></div>
+    </div>
+  </div></div>
+</section>
+
+<section class="route-page" id="page-apropos">
+  <div class="block"><div class="wrap">
+    <div class="eyebrow">Qui nous sommes</div>
+    <div class="sec-title">À propos de Deside</div>
+    <div class="sec-sub">Deside est une plateforme média neutre, entièrement centrée sur Haïti. Notre principe&nbsp;: le peuple, ce sont les équipes ; les réseaux, c'est le terrain ; on marque des buts par les votes et les avis. Le staff Deside joue le VAR&nbsp;: il vérifie, enquête et analyse.</div>
+
+    <h3 class="disp" style="font-size:16px;margin-bottom:6px">Nos rubriques</h3>
+    <div class="pill-list">
+      <span>Politique</span><span>Économie</span><span>Société</span><span>Sécurité</span><span>Culture</span><span>Sport</span><span>Diaspora</span><span>Éducation</span><span>Agriculture</span><span>Jeunesse</span><span>Religion &amp; Vodou</span><span>Vie privée</span><span>Réseaux sociaux</span>
+    </div>
+
+    <h3 class="disp" style="font-size:16px;margin:24px 0 4px">Comment on reste neutre</h3>
+    <div class="two-ent">
+      <div class="ent media"><h4>Le média — Deside</h4><p>Neutre, gratuit, public. Fait les sondages, les émissions, les enquêtes.</p><div class="no">✕ Ne vend jamais rien à un politicien</div></div>
+      <div class="ent agence"><h4>L'agence — AYITIPRO</h4><p>Entité séparée. Vend sites, vidéos, impression, design.</p><div class="yes">✓ C'est ici que se fait le business, pas dans le média</div></div>
+    </div>
+
+    <h3 class="disp" style="font-size:16px;margin:24px 0 12px">L'équipe (le VAR)</h3>
+    <div class="grid g3">
+      <div class="member"><div class="av">D</div><h4>Direction</h4><p>Vision &amp; neutralité</p></div>
+      <div class="member"><div class="av">J</div><h4>Journalistes</h4><p>Enquêtes &amp; vérification</p></div>
+      <div class="member"><div class="av">M</div><h4>Modération</h4><p>Forum &amp; communauté</p></div>
+    </div>
+
+    <h3 class="disp" style="font-size:16px;margin:28px 0 12px">Espace sponsors</h3>
+    <div class="sponsor-slot">
+      <div class="lab">Emplacement sponsor</div>
+      <h4>Soutenez un média neutre</h4>
+      <p>Studios, matériel, connexion, équipe&nbsp;: faire du vrai journalisme coûte. Tout contenu sponsorisé est <b style="color:var(--gold)">clairement étiqueté</b> ; la publicité politique est signalée à part ; un sponsor n'achète jamais un résultat de sondage.</p>
+      <button class="btn" style="margin-top:14px" onclick="openReg()">Nous contacter</button>
+    </div>
+
+    <h3 class="disp" style="font-size:16px;margin:28px 0 10px">Nous rejoindre</h3>
+    <div class="notice"><span>📩</span><span>Inscription par email, téléphone ou Facebook. Un compte = un vote qui compte + le forum pendant les lives.</span></div>
+  </div></div>
+</section>
+
+<footer class="ftr"><div class="wrap">
+  <div class="neutral"><b style="color:var(--gold)">Deside est neutre.</b> Nous n'appartenons à aucun parti et ne soutenons aucun candidat. Nous donnons la parole au peuple et vérifions les faits — pour tous les camps, avec la même rigueur.</div>
+  <div class="social">
+    <a href="https://www.facebook.com/profile.php?id=61593780712268" target="_blank" rel="noopener"><span class="ico i-fb">f</span> Facebook</a>
+    <a href="https://www.facebook.com/groups/3525771750916339" target="_blank" rel="noopener"><span class="ico i-fb">f</span> Gwoup FB</a>
+    <a href="https://www.instagram.com/deside_509" target="_blank" rel="noopener"><span class="ico i-ig">◎</span> Instagram</a>
+    <a href="https://x.com/deside_509" target="_blank" rel="noopener"><span class="ico i-x">𝕏</span> X</a>
+    <a href="https://www.youtube.com/@Deside_509" target="_blank" rel="noopener"><span class="ico i-yt">▶</span> YouTube</a>
+    <a href="https://www.tiktok.com/@desideayiti" target="_blank" rel="noopener"><span class="ico i-tt">♪</span> TikTok</a>
+    <a onclick="openReg()" style="opacity:.6"><span class="ico i-wa">✆</span> WhatsApp · byento</a>
+  </div>
+  <div class="meta"><b>Deside</b> — Pèp la deside · Média neutre 100% Ayiti · Tous sujets, tout le pays</div>
+  <div class="made">Réalisé par <b>AYITIPRO</b> · Bureau multi-services professionnel</div>
+</div></footer>
+
+<div class="modal" id="regModal">
+  <div class="box">
+    <button class="x" onclick="closeReg()">×</button>
+    <h3>Rejoins Deside</h3>
+    <p class="sub">Crée ton compte pour que ton vote compte et pour écrire dans le forum.</p>
+    <div class="reg">
+      <button class="btn g" onclick="loginGoogle()">Continuer avec Google</button>
+      <div class="divi">ou par email</div>
+      <input id="reg-email" type="email" placeholder="Adresse email" autocomplete="email">
+      <input id="reg-pass" type="password" placeholder="Mot de passe (min. 6 caractères)" autocomplete="current-password">
+      <button class="btn primary" onclick="registerEmail()">Créer mon compte</button>
+      <button class="btn" onclick="loginEmail()">J'ai déjà un compte — Me connecter</button>
+      <div id="auth-err" style="display:none;color:#f87171;font-size:12px;margin-top:2px"></div>
+    </div>
+    <div class="notice" style="margin-top:14px"><span>🔒</span><span>Un compte = un vote qui compte. Un seul vote par sondage.</span></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, query, where, getCountFromServer, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCMh-Qa7vq7Hfe6VjymRY5zq0Vsu0IO7us",
+  authDomain: "deside-4bf37.firebaseapp.com",
+  projectId: "deside-4bf37",
+  storageBucket: "deside-4bf37.firebasestorage.app",
+  messagingSenderId: "962178004697",
+  appId: "1:962178004697:web:8345cc3b4adcea79e9b0c8"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+let currentUser = null;
+const POLL_IDS = ['poll-hero','poll-a','poll-b','poll-c','poll-d'];
+
+/* ---------- NAVIGATION ---------- */
+function navTo(pid){
+  document.querySelectorAll('.route-page').forEach(s=>s.classList.remove('show'));
+  const t=document.getElementById('page-'+pid); if(t) t.classList.add('show');
+  document.querySelectorAll('.mainnav a').forEach(a=>a.classList.toggle('active',a.dataset.nav===pid));
+  window.scrollTo(0,0);
+}
+window.navTo=navTo;
+
+/* ---------- AUTH ---------- */
+function friendlyErr(e){
+  const c=(e&&e.code)||''; 
+  if(c.includes('email-already-in-use')) return "Cet email a déjà un compte. Clique « Me connecter ».";
+  if(c.includes('invalid-email')) return "Adresse email invalide.";
+  if(c.includes('weak-password')) return "Mot de passe trop court (min. 6 caractères).";
+  if(c.includes('wrong-password')||c.includes('invalid-credential')) return "Email ou mot de passe incorrect.";
+  if(c.includes('user-not-found')) return "Aucun compte avec cet email. Crée-en un.";
+  if(c.includes('popup-blocked')||c.includes('popup-closed')) return "La fenêtre Google a été bloquée. Autorise les pop-ups et réessaie.";
+  if(c.includes('unauthorized-domain')) return "Domaine non autorisé dans Firebase (ajoute deside509.com).";
+  return (e&&e.message)||"Erreur, réessaie.";
+}
+function showErr(e){ const el=document.getElementById('auth-err'); el.textContent=friendlyErr(e); el.style.display='block'; }
+function clearErr(){ const el=document.getElementById('auth-err'); if(el){el.textContent='';el.style.display='none';} }
+
+async function loginGoogle(){ clearErr(); try{ await signInWithPopup(auth,provider); closeReg(); }catch(e){ showErr(e); } }
+async function registerEmail(){ clearErr();
+  const em=document.getElementById('reg-email').value.trim();
+  const pw=document.getElementById('reg-pass').value;
+  if(!em||!pw){ showErr({message:"Remplis email et mot de passe."}); return; }
+  try{ await createUserWithEmailAndPassword(auth,em,pw); closeReg(); }catch(e){ showErr(e); }
+}
+async function loginEmail(){ clearErr();
+  const em=document.getElementById('reg-email').value.trim();
+  const pw=document.getElementById('reg-pass').value;
+  if(!em||!pw){ showErr({message:"Remplis email et mot de passe."}); return; }
+  try{ await signInWithEmailAndPassword(auth,em,pw); closeReg(); }catch(e){ showErr(e); }
+}
+function logout(){ signOut(auth); }
+window.loginGoogle=loginGoogle; window.registerEmail=registerEmail; window.loginEmail=loginEmail; window.logout=logout;
+
+function updateAuthUI(user){
+  const btn=document.querySelector('.hdr .join');
+  const pill=document.getElementById('authpill');
+  if(user){
+    const name=user.displayName?user.displayName.split(' ')[0]:(user.email?user.email.split('@')[0]:'ou');
+    btn.textContent='👤 '+name;
+    btn.onclick=logout; btn.title="Se déconnecter";
+    if(pill) pill.textContent='Connecté — ton vote compte';
+  }else{
+    btn.textContent="S'inscrire"; btn.onclick=openReg; btn.title="";
+    if(pill) pill.textContent='Connecte-toi pour voter';
+  }
+}
+
+onAuthStateChanged(auth, async (user)=>{
+  currentUser=user; updateAuthUI(user);
+  for(const pid of POLL_IDS){ refreshPoll(pid); }
+});
+
+/* ---------- VOTE RÉEL ---------- */
+function setTotal(pid,total){
+  const cEl=document.getElementById('count-'+pid.split('-')[1]);
+  if(cEl) cEl.textContent=total.toLocaleString('fr-FR');
+}
+async function showResults(pid){
+  const poll=document.getElementById(pid);
+  const opts=[...poll.querySelectorAll('.opt')];
+  let counts={}, total=0;
+  for(const o of opts){
+    const oid=o.dataset.oid;
+    try{ const s=await getCountFromServer(query(collection(db,'polls',pid,'votes'),where('optionId','==',oid)));
+      counts[oid]=s.data().count; }catch(e){ counts[oid]=0; }
+    total+=counts[oid];
+  }
+  let max=0; Object.values(counts).forEach(v=>{if(v>max)max=v;});
+  opts.forEach(o=>{ const v=counts[o.dataset.oid]||0; const pct=total?Math.round(v/total*100):0;
+    o.querySelector('.fill').style.width=pct+'%'; o.querySelector('.pct').textContent=pct+'%';
+    if(v===max&&max>0) o.classList.add('win'); });
+  poll.classList.add('voted'); setTotal(pid,total);
+}
+async function refreshPoll(pid){
+  const poll=document.getElementById(pid); if(!poll) return;
+  try{ const s=await getCountFromServer(collection(db,'polls',pid,'votes')); setTotal(pid,s.data().count); }catch(e){}
+  if(currentUser){
+    try{ const vs=await getDoc(doc(db,'polls',pid,'votes',currentUser.uid));
+      if(vs.exists()) await showResults(pid); }catch(e){}
+  }
+}
+async function vote(pid, el){
+  const poll=document.getElementById(pid);
+  if(poll.classList.contains('voted')) return;
+  if(!currentUser){ openReg(); return; }
+  const oid=el.dataset.oid;
+  try{
+    await setDoc(doc(db,'polls',pid,'votes',currentUser.uid),{ optionId:oid, ts:serverTimestamp() });
+    await showResults(pid);
+  }catch(e){
+    if(e && e.code==='permission-denied'){ await showResults(pid); }
+    else { alert('Erè pandan vòt la: '+((e&&e.message)||e)); }
+  }
+}
+window.vote=vote;
+function fakeShare(){ 
+  if(navigator.share){ navigator.share({title:'Deside',text:'Kisa w panse? Vin vote sou Deside!',url:location.href}).catch(()=>{}); }
+  else { alert('Pataje Deside: '+location.href); }
+}
+window.fakeShare=fakeShare;
+
+/* ---------- SLIDER ---------- */
+let si=0; const slidesEl=document.getElementById('slides');
+const n=slidesEl.children.length; const dots=document.getElementById('sdots');
+for(let i=0;i<n;i++){ const d=document.createElement('i'); d.onclick=((k)=>()=>go(k))(i); dots.appendChild(d); }
+function renderSlides(){ slidesEl.style.transform='translateX(-'+(si*100)+'%)'; [...dots.children].forEach((x,k)=>x.classList.toggle('on',k===si)); }
+function go(k){ si=(k+n)%n; renderSlides(); }
+function slide(dir){ go(si+dir); }
+window.slide=slide;
+renderSlides(); setInterval(()=>go(si+1),5500);
+
+/* ---------- FORUM (démo) ---------- */
+let forumOpen=true;
+function toggleForum(){
+  forumOpen=!forumOpen; const s=document.getElementById('forumState');
+  if(forumOpen){ s.classList.remove('closed'); s.classList.add('open');
+    document.getElementById('forumTitle').textContent='Forum OUVERT — Débat en direct';
+    document.getElementById('forumSub').textContent="Sujet imposé : « La sécurité s'améliore-t-elle ? » · fermé à la fin de l'émission";
+  }else{ s.classList.remove('open'); s.classList.add('closed');
+    document.getElementById('forumTitle').textContent='Forum FERMÉ';
+    document.getElementById('forumSub').textContent='Le forum ouvre uniquement pendant une émission ou un live.'; }
+}
+window.toggleForum=toggleForum;
+function sendTip(){ document.getElementById('tip-ok').style.display='inline'; }
+window.sendTip=sendTip;
+
+/* ---------- RUBRIQUES ---------- */
+document.querySelectorAll('.rubs').forEach(bar=>{
+  bar.querySelectorAll('.r').forEach(r=>{ r.onclick=()=>{ bar.querySelectorAll('.r').forEach(x=>x.classList.remove('on')); r.classList.add('on'); }; });
+});
+
+/* ---------- MODAL ---------- */
+function openReg(){ clearErr(); document.getElementById('regModal').classList.add('show'); }
+function closeReg(){ document.getElementById('regModal').classList.remove('show'); }
+window.openReg=openReg; window.closeReg=closeReg;
+document.getElementById('regModal').addEventListener('click',function(e){ if(e.target===this) closeReg(); });
+
+/* ---------- INIT ---------- */
+navTo('accueil');
+</script>
+</body>
+</html>
