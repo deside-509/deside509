@@ -10,13 +10,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#1B2A4A; --blue:#2F5FD0; --blue2:#4E7BE8; --gold:#E8B54D;
-  --bg:#0A1020; --bg2:#0F1830; --card:#141F3A; --card2:#1B294A;
-  --line:#26365C; --ink:#EEF3FB; --muted:#94A3C2; --radius:16px;
+  --navy:#1B2A4A; --blue:#1E5FE0; --blue2:#4E7BE8; --gold:#E8A825; --red:#D21034;
+  --bg:#F4F6FB; --bg2:#FFFFFF; --card:#FFFFFF; --card2:#FBFCFE;
+  --line:#E4E9F3; --ink:#141F3A; --muted:#5C6B8C; --radius:16px;
+  --blue-soft:#EAF1FE; --gold-soft:#FDF3DD; --red-soft:#FDE8EC;
   --disp:"Space Grotesk",system-ui,sans-serif;
   --body:"Inter",system-ui,-apple-system,sans-serif;
-  --glow:color-mix(in srgb,var(--blue) 55%,transparent);
-  --goldglow:color-mix(in srgb,var(--gold) 45%,transparent);
+  --glow:color-mix(in srgb,var(--blue) 20%,transparent);
+  --goldglow:color-mix(in srgb,var(--gold) 24%,transparent);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -295,6 +296,36 @@ h1,h2,h3,.disp{font-family:var(--disp)}
 .about-logo{max-width:230px;margin-bottom:26px;padding:20px;text-align:center;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius)}
 .about-logo img{width:120px;height:120px;object-fit:contain;margin:0 auto 10px;border-radius:14px;background:#F6F0E2;padding:8px;display:block}
 .about-logo .cap{font-family:var(--disp);font-size:12.5px;color:var(--muted);letter-spacing:1px}
+
+/* ============ THÈME CLAIR (surcharge) + GRANDE BANNIÈRE ============ */
+.demobar{background:linear-gradient(90deg,#eaf1fe,#f3f7ff);color:#41527a;border-bottom:1px solid var(--line)}
+.demobar b{color:var(--navy)}
+.demobar .pill{background:var(--gold-soft);color:#8a6410}
+.hdr{background:#fff}
+.mainnav{background:#fff}
+.mainnav a{background:#fff;color:var(--muted)}
+.hero{background:linear-gradient(180deg,#fff,var(--bg))}
+.notice{background:var(--gold-soft);border-color:#f0e0b8;color:#6b5a2a}
+.notice b{color:#8a6410}
+.card,.poll,.ent,.member,.sponsor-slot,.tip,.forum-state,.slider{box-shadow:0 1px 2px rgba(20,31,58,.05),0 8px 24px rgba(20,31,58,.06)}
+.bigbanner{position:relative;width:100%;overflow:hidden;background:#0a1220}
+.bb-track{display:flex;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.bb-slide{min-width:100%;position:relative;height:clamp(300px,52vw,460px);display:flex;flex-direction:column;justify-content:flex-end;padding:34px 22px;color:#fff}
+.bb-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,14,30,.1),rgba(8,14,30,.8));z-index:1}
+.bb-slide .wrapb{max-width:1180px;margin:0 auto;width:100%;position:relative;z-index:2}
+.bb-slide.b1{background:radial-gradient(800px 340px at 25% 30%,rgba(30,95,224,.65),transparent),linear-gradient(135deg,#132a55,#0a1220)}
+.bb-slide.b2{background:radial-gradient(800px 340px at 75% 30%,rgba(210,16,52,.6),transparent),linear-gradient(135deg,#2a1220,#0a1220)}
+.bb-slide.b3{background:radial-gradient(800px 340px at 50% 30%,rgba(232,168,37,.6),transparent),linear-gradient(135deg,#2a2410,#0a1220)}
+.bb-cat{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:5px 12px;border-radius:5px;color:#fff;margin-bottom:12px}
+.bb-slide h2{font-family:var(--disp);font-size:clamp(22px,4vw,40px);font-weight:800;line-height:1.1;max-width:760px;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.bb-slide p{font-size:14px;color:#e2e9f6;margin-top:10px;max-width:560px}
+.bb-media-hint{position:absolute;top:16px;right:22px;z-index:3;background:rgba(255,255,255,.16);color:#fff;font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px}
+.bb-cta{display:inline-block;margin-top:16px;background:var(--gold);color:#3a2a05;font-weight:800;font-size:13px;padding:11px 20px;border-radius:9px;cursor:pointer;border:none}
+.bb-dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:8px}
+.bb-dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:.2s}
+.bb-dots i.on{background:var(--gold);width:24px;border-radius:5px}
+.bb-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.92);color:var(--navy);font-size:20px;cursor:pointer;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.bb-arrow.l{left:16px}.bb-arrow.r{right:16px}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -332,6 +363,16 @@ h1,h2,h3,.disp{font-family:var(--disp)}
 </nav>
 
 <section class="route-page" id="page-accueil">
+  <div class="bigbanner">
+    <div class="bb-track" id="bbTrack">
+      <div class="bb-slide b1"><span class="bb-media-hint">🖼️ Ranplase ak imaj/videyo ou</span><div class="wrapb"><span class="bb-cat" style="background:#B45309">Sekirite · Sondaj</span><h2>Èske sekirite a ap amelyore nan zòn ou ?</h2><p>Vin bay opinyon w — plizyè milye moun deja vote. Kisa w panse ?</p><button class="bb-cta" onclick="navTo('sondages')">Vote kounye a</button></div></div>
+      <div class="bb-slide b2"><span class="bb-media-hint">🎬 Ranplase ak videyo/YouTube</span><div class="wrapb"><span class="bb-cat" style="background:#D21034">Live · Aswè a 19h</span><h2>Deba : Sekirite &amp; eleksyon 2026</h2><p>An dirèk sou Deside. Fowòm nan ouvè pandan emisyon an.</p><button class="bb-cta" onclick="navTo('lives')">Gade live la</button></div></div>
+      <div class="bb-slide b3"><span class="bb-media-hint">🖼️ Ranplase ak imaj ou</span><div class="wrapb"><span class="bb-cat" style="background:#E8A825;color:#3a2a05">Dokimantè</span><h2>Repiblik ONG yo : kote lajan an pase ?</h2><p>Ankèt ak prèv, dwa repons bay tout moun.</p><button class="bb-cta" onclick="navTo('documentaires')">Gade dokimantè a</button></div></div>
+    </div>
+    <button class="bb-arrow l" id="bbPrev">‹</button>
+    <button class="bb-arrow r" id="bbNext">›</button>
+    <div class="bb-dots" id="bbDots"></div>
+  </div>
   <div class="hero">
     <div class="hero-bg"></div>
     <div class="pitch"><div class="cl"></div><div class="cc"></div></div>
@@ -2775,6 +2816,20 @@ window.importAllData = importAllData;
 
 /* ---------- INIT ---------- */
 navTo('accueil');
+</script>
+<script>
+(function(){
+  var track=document.getElementById('bbTrack'); if(!track) return;
+  var n=track.children.length, idx=0;
+  var dw=document.getElementById('bbDots');
+  for(var i=0;i<n;i++){ (function(k){ var d=document.createElement('i'); d.addEventListener('click',function(){go(k);}); dw.appendChild(d); })(i); }
+  function render(){ track.style.transform='translateX(-'+(idx*100)+'%)'; var ds=dw.children; for(var j=0;j<ds.length;j++){ ds[j].className = (j===idx?'on':''); } }
+  function go(k){ idx=(k+n)%n; render(); }
+  var pv=document.getElementById('bbPrev'), nx=document.getElementById('bbNext');
+  if(pv) pv.addEventListener('click',function(){go(idx-1);});
+  if(nx) nx.addEventListener('click',function(){go(idx+1);});
+  render(); setInterval(function(){go(idx+1);},5500);
+})();
 </script>
 </body>
 </html>
