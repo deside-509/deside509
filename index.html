@@ -317,14 +317,31 @@ h1,h2,h3,.disp{font-family:var(--disp)}
 .logo-live{position:absolute;top:-7px;right:-12px;background:var(--red);color:#fff;font-size:8.5px;font-weight:800;letter-spacing:.3px;padding:2px 7px;border-radius:10px;box-shadow:0 2px 8px rgba(210,16,52,.5);z-index:5;display:flex;align-items:center;gap:3px;white-space:nowrap}
 .logo-live i{width:4px;height:4px;border-radius:50%;background:#fff;animation:blink 1.1s infinite}
 /* ===== MENU BURGER (pliable) ===== */
-.menu-toggle{display:none;width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:20px;color:var(--navy);align-items:center;justify-content:center}
-@media(max-width:860px){
-  .menu-toggle{display:flex}
-  .mainnav{position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:4px;padding:10px 16px;box-shadow:0 12px 24px rgba(20,31,58,.14);border-bottom:1px solid var(--line);max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:.22s;z-index:60}
-  .mainnav.open{max-height:70vh;overflow:auto;opacity:1;pointer-events:auto;padding:12px 16px}
-  .mainnav a{width:100%}
-  .hdr{position:relative}
-}
+.menu-toggle{display:flex;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:20px;color:var(--navy);align-items:center;justify-content:center}
+.mainnav{max-height:0;overflow:hidden;padding:0 22px;transition:max-height .28s ease,padding .28s ease;flex-direction:column;gap:6px;align-items:stretch;box-shadow:0 10px 22px rgba(20,31,58,.10)}
+.mainnav.open{max-height:82vh;overflow:auto;padding:12px 22px}
+.mainnav a{width:100%;text-align:left}
+/* ===== ACCORDÉON ZONES (contrôlé, marche partout) ===== */
+.acc-dep{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:10px;background:var(--card);box-shadow:0 1px 2px rgba(20,31,58,.04)}
+.acc-dep-head{display:flex;align-items:center;gap:8px;padding:14px 16px;cursor:pointer;font-weight:700;color:var(--navy);user-select:none}
+.acc-dep-head .acc-arrow{margin-left:auto;color:var(--gold);transition:transform .2s;font-size:14px}
+.acc-dep.open>.acc-dep-head .acc-arrow{transform:rotate(90deg)}
+.acc-dep-body{display:none;padding:2px 14px 12px}
+.acc-dep.open>.acc-dep-body{display:block}
+.acc-count{font-size:11px;color:var(--muted);font-weight:600;margin-left:auto}
+.acc-dep-head .acc-arrow{margin-left:8px}
+.zl-com{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.acc-com{background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.acc-com-head{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--navy);user-select:none}
+.acc-com-head .acc-arrow{margin-left:auto;color:var(--gold);transition:transform .2s;font-size:12px}
+.acc-com.open>.acc-com-head .acc-arrow{transform:rotate(90deg)}
+.acc-com-body{display:none;flex-wrap:wrap;gap:6px;padding:0 12px 10px}
+.acc-com.open>.acc-com-body{display:flex}
+.acc-com-body span{font-size:11px;background:var(--card);border:1px solid var(--line);padding:4px 10px;border-radius:20px;color:var(--muted)}
+.acc-com-body .acc-com{width:100%}
+.acc-com-flat{font-size:12px;background:var(--bg2);border:1px solid var(--line);padding:8px 12px;border-radius:10px;color:var(--muted)}
+.arr-head{font-size:12px;font-weight:700;color:var(--muted);margin:10px 0 6px}
+.dep-chef{font-size:11px;color:var(--gold);font-weight:700}
 /* ===== GRANDE BANNIÈRE MIXTE (texte + image/vidéo) ===== */
 .bigbanner{position:relative;width:100%;overflow:hidden;background:#0a1220}
 .bb-track{display:flex;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
@@ -1065,83 +1082,54 @@ window.renderPublicZones = function(){
   const el = document.getElementById('zonPubList');
   if(!el) return;
   if(!PUB_ZONES.length){ el.innerHTML = '<div class="fig-empty">Aucun département enregistré pour le moment.</div>'; return; }
-
-  function asArray(v){
-    if(!v) return [];
-    if(Array.isArray(v)) return v;
-    if(typeof v === 'object') return Object.values(v);
-    return [];
-  }
+  function asArray(v){ if(!v) return []; if(Array.isArray(v)) return v; if(typeof v==='object') return Object.values(v); return []; }
   function getSubs(c){
-    if(!c || typeof c !== 'object') return [];
-    // 1) champ direct de sous-zones
+    if(!c || typeof c!=='object') return [];
     let cand = c.sections_communales || c.sections || c.zones || c.sous_zones || c.subzones || c.localites;
-    // 2) champ "quartiers" qui peut CONTENIR sections_communales (structure IHSI)
     if(!cand && c.quartiers){
-      const q = c.quartiers;
-      if(q && !Array.isArray(q) && typeof q === 'object' && (q.sections_communales || q.sections)){
-        cand = q.sections_communales || q.sections;
-      } else {
-        cand = q; // quartiers est directement la liste
-      }
+      const q=c.quartiers;
+      if(q && !Array.isArray(q) && typeof q==='object' && (q.sections_communales||q.sections)) cand=q.sections_communales||q.sections;
+      else cand=q;
     }
     return asArray(cand);
   }
-  function nameOf(x){ return (typeof x === 'string') ? x : ((x && (x.name || x.nom || x.label || x.id)) || '\u2014'); }
-  function toArr(src){
-    if(!src) return [];
-    if(Array.isArray(src)) return src;
-    if(typeof src === 'object') return Object.values(src);
-    return [];
-  }
+  function nameOf(x){ return (typeof x==='string')?x:((x && (x.name||x.nom||x.label||x.id))||'\u2014'); }
   function renderCommune(c){
-    const cname = nameOf(c);
-    const chef = (c && (c.chef_lieu === true || c.is_chef_lieu === true)) ? '\u2605 ' : '';
-    const subs = getSubs(c);
+    const cname=nameOf(c);
+    const chef=(c && (c.chef_lieu===true||c.is_chef_lieu===true))?'\u2605 ':'';
+    const subs=getSubs(c);
     if(subs.length){
-      const inner = subs.map(sz=>{
-        const szName = nameOf(sz);
-        const szSubs = getSubs(sz);
+      const inner=subs.map(sz=>{
+        const szName=nameOf(sz); const szSubs=getSubs(sz);
         if(szSubs.length){
-          return `<details class="zone-com-det"><summary>${escHtml(szName)}</summary><div class="zl">${szSubs.map(q=>`<span>${escHtml(nameOf(q))}</span>`).join('')}</div></details>`;
+          return `<div class="acc-com"><div class="acc-com-head" onclick="toggleAcc(this)">${escHtml(szName)}<span class="acc-arrow">\u25b8</span></div><div class="acc-com-body">${szSubs.map(q=>`<span>${escHtml(nameOf(q))}</span>`).join('')}</div></div>`;
         }
         return `<span>${escHtml(szName)}</span>`;
       }).join('');
-      return `<details class="zone-com-det"><summary>${chef}${escHtml(cname)}</summary><div class="zl">${inner}</div></details>`;
+      return `<div class="acc-com"><div class="acc-com-head" onclick="toggleAcc(this)">${chef}${escHtml(cname)}<span class="acc-arrow">\u25b8</span></div><div class="acc-com-body">${inner}</div></div>`;
     }
-    return `<div class="zone-com-flat">${chef}${escHtml(cname)}</div>`;
+    return `<div class="acc-com-flat">${chef}${escHtml(cname)}</div>`;
   }
-
-  const sorted = [...PUB_ZONES].sort((a,b)=> (a.name||'').localeCompare(b.name||''));
-  el.innerHTML = sorted.map(z=>{
-    let body, totalCommunes = 0, arrsLen = 0;
-    try {
-      const arrs = Array.isArray(z.arrondissements) ? z.arrondissements : [];
-      arrsLen = arrs.length;
-      const communesLegacy = toArr(z.communes);
-      totalCommunes = arrs.length ? arrs.reduce((n,a)=> n + toArr(a.communes).length, 0) : communesLegacy.length;
-
+  const sorted=[...PUB_ZONES].sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  el.innerHTML=sorted.map(z=>{
+    let body, totalCommunes=0, arrsLen=0;
+    try{
+      const arrs=Array.isArray(z.arrondissements)?z.arrondissements:[];
+      arrsLen=arrs.length;
+      const communesLegacy=asArray(z.communes);
+      totalCommunes=arrs.length?arrs.reduce((n,a)=>n+asArray(a.communes).length,0):communesLegacy.length;
       if(arrs.length){
-        body = arrs.map(a=>{
-          const communes = toArr(a.communes);
-          return `<div class="zone-arr">
-            <div class="arr-head">Awondisman ${a.number?("#"+a.number):""} \u2014 ${escHtml(a.name||'')}</div>
-            <div class="zl-com">${communes.map(renderCommune).join('')}</div>
-          </div>`;
-        }).join('');
+        body=arrs.map(a=>`<div class="zone-arr"><div class="arr-head">Awondisman ${a.number?("#"+a.number):""} \u2014 ${escHtml(a.name||'')}</div><div class="zl-com">${asArray(a.communes).map(renderCommune).join('')}</div></div>`).join('');
       } else if(communesLegacy.length){
-        body = `<div class="zl-com">${communesLegacy.map(renderCommune).join('')}</div>`;
+        body=`<div class="zl-com">${communesLegacy.map(renderCommune).join('')}</div>`;
       } else {
-        body = '<p style="font-size:12px;color:var(--muted)">Aucune commune détaillée pour ce département.</p>';
+        body='<p style="font-size:12px;color:var(--muted)">Aucune commune détaillée pour ce département.</p>';
       }
-    } catch(err){
-      body = `<p style="font-size:12px;color:#f87171">\u26a0\ufe0f Erreur d'affichage pour ce département : ${escHtml(String((err&&err.message)||err))}</p>`;
+    }catch(err){
+      body=`<p style="font-size:12px;color:#f87171">\u26a0\ufe0f Erreur : ${escHtml(String((err&&err.message)||err))}</p>`;
     }
-    const depChef = z.chef_lieu ? `<span class="dep-chef">\u2605 ${escHtml(z.chef_lieu)}</span>` : '';
-    return `<details class="zone-dep">
-      <summary>${escHtml(z.name || z.id)} ${depChef}<span class="cnt">${arrsLen?arrsLen+' arr. \u00b7 ':''}${totalCommunes} commune${totalCommunes>1?'s':''}</span></summary>
-      <div class="zbody">${body}</div>
-    </details>`;
+    const depChef=z.chef_lieu?`<span class="dep-chef">\u2605 ${escHtml(z.chef_lieu)}</span>`:'';
+    return `<div class="acc-dep"><div class="acc-dep-head" onclick="toggleAcc(this)">${escHtml(z.name||z.id)} ${depChef}<span class="acc-count">${arrsLen?arrsLen+' arr. \u00b7 ':''}${totalCommunes} commune${totalCommunes>1?'s':''}</span><span class="acc-arrow">\u25b8</span></div><div class="acc-dep-body">${body}</div></div>`;
   }).join('');
 };
 
@@ -2839,6 +2827,8 @@ navTo('accueil');
 </script>
 <script>
 window.toggleMenu=function(){ var n=document.getElementById('mainnav'); if(n) n.classList.toggle('open'); };
+window.toggleAcc=function(h){ var p=h&&h.parentElement; if(p) p.classList.toggle('open'); };
+document.addEventListener('click',function(e){ var a=e.target.closest&&e.target.closest('#mainnav a'); if(a){ var n=document.getElementById('mainnav'); if(n) n.classList.remove('open'); } });
 (function(){
   var t=document.getElementById('bbTrack'); if(!t) return;
   var n=t.children.length, i=0, dw=document.getElementById('bbDots');
